@@ -2,20 +2,74 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Хрючево</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="style.css">
+  <title>Food Archive</title>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <h1>Хрючево</h1>
+  <div class="topbar">
+    <div>
+      <h1>🍜 Food Archive</h1>
+      <p class="subtitle">Архив постов канала</p>
+    </div>
+
+    <button id="adminToggle">＋</button>
+     </div>
+
+  <input
+    type="text"
+    id="search"
+    placeholder="Поиск..."
+  />
 
   <div id="filters"></div>
 
   <div id="gallery"></div>
 
-  <script src="script.js"></script>
+  <div id="viewer" class="viewer hidden">
+    <div class="viewer-overlay"></div>
 
+    <div class="viewer-content">
+
+      <button id="closeViewer">✕</button>
+
+      <img id="viewerImage" src="" />
+
+      <div class="viewer-info">
+        <h2 id="viewerTitle"></h2>
+
+        <a id="viewerPost" target="_blank">
+          Открыть пост
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="adminPanel" class="admin hidden">
+
+    <h2>Добавить пост</h2>
+
+    <input id="adminTitle" placeholder="Название" />
+
+    <input id="adminImage" placeholder="images/photo.jpg" />
+
+    <input id="adminTags" placeholder="суп, чай, лапша" />
+
+    <input id="adminPost" placeholder="https://t.me/..." />
+
+    <button id="savePost">Сохранить</button>
+
+    <p class="admin-note">
+      Посты сохраняются только в браузере.
+      Для GitHub нужно потом вручную обновить posts.json.
+    </p>
+
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
