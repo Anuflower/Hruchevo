@@ -1,0 +1,15 @@
+[
+  {
+    "title": "Маргарита",
+    "image": "images/pizza.jpg",
+    "tags": ["pizza", "cheese"],
+    "post": "https://t.me/yourchannel/1"
+  },
+
+  {
+    "title": "Тирамису",
+    "image": "images/cake.jpg",
+    "tags": ["dessert"],
+    "post": "https://t.me/yourchannel/2"
+  }
+]
