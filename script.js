@@ -1,3 +1,41 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBQ4WyGIa7yMCnovQgtc7k5fgkSKj4QcdY",
+  authDomain: "hruchevo.firebaseapp.com",
+  projectId: "hruchevo",
+  storageBucket: "hruchevo.firebasestorage.app",
+  messagingSenderId: "897207979558",
+  appId: "1:897207979558:web:f7fd4dde492e35bb5f60e7",
+  measurementId: "G-RCGZDKWFB4"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const tg = window.Telegram.WebApp;
+
+tg.expand();
+
+const user = tg.initDataUnsafe.user;
+
+const userId = user?.id;
+
+const ADMINS = [
+  ВСТАВЬ_СЮДА_СВОЙ_ID
+];
+
+const isAdmin = ADMINS.includes(userId);
+
 const gallery = document.getElementById("gallery");
 const filters = document.getElementById("filters");
 const search = document.getElementById("search");
@@ -14,34 +52,59 @@ const adminPanel = document.getElementById("adminPanel");
 
 const savePost = document.getElementById("savePost");
 
+if (!isAdmin) {
+
+  adminToggle.style.display = "none";
+
+}
+
 let allPosts = [];
 
-fetch("posts.json")
-  .then(res => res.json())
-  .then(posts => {
+loadPosts();
 
-    const localPosts = JSON.parse(
-      localStorage.getItem("customPosts") || "[]"
-    );
+async function loadPosts() {
 
-    allPosts = [...localPosts, ...posts];
+  const q = query(
+    collection(db, "posts")
+  );
 
-    renderFilters(allPosts);
-    showPosts(allPosts);
+  const snapshot = await getDocs(q);
+
+  allPosts = [];
+
+  snapshot.forEach(doc => {
+
+    allPosts.push(doc.data());
+
   });
+
+  allPosts.reverse();
+
+  renderFilters(allPosts);
+
+  showPosts(allPosts);
+}
 
 function renderFilters(posts) {
 
   filters.innerHTML = "";
 
-  const tags = [...new Set(posts.flatMap(post => post.tags))];
+  const tags = [
+    ...new Set(
+      posts.flatMap(post => post.tags)
+    )
+  ];
 
   const allBtn = document.createElement("button");
 
   allBtn.innerText = "Все";
 
-  allBtn.onclick = () => showPosts(allPosts);
-  
+  allBtn.onclick = () => {
+
+    showPosts(allPosts);
+
+  };
+
   filters.appendChild(allBtn);
 
   tags.forEach(tag => {
@@ -64,7 +127,7 @@ function renderFilters(posts) {
 }
 
 function showPosts(posts) {
-  
+
   gallery.innerHTML = "";
 
   posts.forEach(post => {
@@ -81,10 +144,14 @@ function showPosts(posts) {
       </div>
     `;
 
-    card.onclick = () => openViewer(post);
+    card.onclick = () => {
+
+      openViewer(post);
+
+    };
 
     gallery.appendChild(card);
-     });
+  });
 }
 
 function openViewer(post) {
@@ -99,7 +166,9 @@ function openViewer(post) {
 }
 
 closeViewer.onclick = () => {
+
   viewer.classList.add("hidden");
+
 };
 
 search.addEventListener("input", e => {
@@ -107,25 +176,34 @@ search.addEventListener("input", e => {
   const value = e.target.value.toLowerCase();
 
   const filtered = allPosts.filter(post => {
-    
+
     return (
       post.title.toLowerCase().includes(value) ||
       post.tags.join(" ").toLowerCase().includes(value)
     );
+
   });
 
   showPosts(filtered);
 });
 
 adminToggle.onclick = () => {
+
   adminPanel.classList.toggle("hidden");
+
 };
 
-savePost.onclick = () => {
+savePost.onclick = async () => {
 
-  const title = document.getElementById("adminTitle").value;
+  if (!isAdmin) return;
 
-  const image = document.getElementById("adminImage").value;
+  const title = document
+    .getElementById("adminTitle")
+    .value;
+
+  const image = document
+    .getElementById("adminImage")
+    .value;
 
   const tags = document
     .getElementById("adminTags")
@@ -133,30 +211,25 @@ savePost.onclick = () => {
     .split(",")
     .map(tag => tag.trim());
 
-  const post = document.getElementById("adminPost").value;
+  const post = document
+    .getElementById("adminPost")
+    .value;
 
   const newPost = {
     title,
     image,
     tags,
-    post
+    post,
+    created: Date.now(),
+    author: userId
   };
 
-  const localPosts = JSON.parse(
-    localStorage.getItem("customPosts") || "[]"
+  await addDoc(
+    collection(db, "posts"),
+    newPost
   );
-
-  localPosts.unshift(newPost);
-
-  localStorage.setItem(
-    "customPosts",
-    JSON.stringify(localPosts)
-  );
-  
-  allPosts.unshift(newPost);
-
-  renderFilters(allPosts);
-  showPosts(allPosts);
 
   adminPanel.classList.add("hidden");
+
+  loadPosts();
 };
