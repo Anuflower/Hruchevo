@@ -31,7 +31,7 @@ const user = tg.initDataUnsafe.user;
 const userId = user?.id;
 
 const ADMINS = [
-  940931806
+  ВСТАВЬ_СЮДА_СВОЙ_ID
 ];
 
 const isAdmin = ADMINS.includes(userId);
@@ -42,13 +42,16 @@ const search = document.getElementById("search");
 
 const viewer = document.getElementById("viewer");
 const viewerImage = document.getElementById("viewerImage");
-const viewerTitle = document.getElementById("viewerTitle");
+const viewerDate = document.getElementById("viewerDate");
+const viewerDescription = document.getElementById("viewerDescription");
 const viewerPost = document.getElementById("viewerPost");
 
 const closeViewer = document.getElementById("closeViewer");
 
 const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
+
+const closeAdmin = document.getElementById("closeAdmin");
 
 const savePost = document.getElementById("savePost");
 
@@ -138,10 +141,6 @@ function showPosts(posts) {
 
     card.innerHTML = `
       <img src="${post.image}">
-
-      <div class="card-title">
-        ${post.title}
-      </div>
     `;
 
     card.onclick = () => {
@@ -160,7 +159,10 @@ function openViewer(post) {
 
   viewerImage.src = post.image;
 
-  viewerTitle.innerText = post.title;
+  viewerDate.innerText = post.date || "";
+
+  viewerDescription.innerText =
+    post.description || "";
 
   viewerPost.href = post.post;
 }
@@ -178,8 +180,9 @@ search.addEventListener("input", e => {
   const filtered = allPosts.filter(post => {
 
     return (
-      post.title.toLowerCase().includes(value) ||
-      post.tags.join(" ").toLowerCase().includes(value)
+      post.tags.join(" ")
+      .toLowerCase()
+      .includes(value)
     );
 
   });
@@ -189,7 +192,13 @@ search.addEventListener("input", e => {
 
 adminToggle.onclick = () => {
 
-  adminPanel.classList.toggle("hidden");
+  adminPanel.classList.remove("hidden");
+
+};
+
+closeAdmin.onclick = () => {
+
+  adminPanel.classList.add("hidden");
 
 };
 
@@ -197,12 +206,12 @@ savePost.onclick = async () => {
 
   if (!isAdmin) return;
 
-  const title = document
-    .getElementById("adminTitle")
-    .value;
-
   const image = document
     .getElementById("adminImage")
+    .value;
+
+  const date = document
+    .getElementById("adminDate")
     .value;
 
   const tags = document
@@ -211,14 +220,19 @@ savePost.onclick = async () => {
     .split(",")
     .map(tag => tag.trim());
 
+  const description = document
+    .getElementById("adminDescription")
+    .value;
+
   const post = document
     .getElementById("adminPost")
     .value;
 
   const newPost = {
-    title,
     image,
+    date,
     tags,
+    description,
     post,
     created: Date.now(),
     author: userId
