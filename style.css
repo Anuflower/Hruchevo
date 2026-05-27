@@ -92,11 +92,6 @@ h1 {
   display: block;
 }
 
-.card-title {
-  padding: 12px;
-  font-size: 15px;
-}
-
 .viewer {
   position: fixed;
   inset: 0;
@@ -113,21 +108,18 @@ h1 {
   position: relative;
   z-index: 2;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  overflow-y: auto;
   padding: 20px;
 }
 
 .viewer img {
-  max-width: 100%;
-  max-height: 70vh;
+  width: 100%;
   border-radius: 24px;
+  margin-top: 60px;
 }
 
 #closeViewer {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
   border: none;
@@ -137,16 +129,26 @@ h1 {
   height: 42px;
   border-radius: 50%;
   font-size: 18px;
+  z-index: 5;
 }
 
 .viewer-info {
   margin-top: 20px;
-  text-align: center;
+}
+
+#viewerDate {
+  color: #8d99a8;
+  margin-bottom: 16px;
+}
+
+#viewerDescription {
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .viewer-info a {
   display: inline-block;
-  margin-top: 10px;
+  margin-top: 24px;
   background: #2aabee;
   color: white;
   text-decoration: none;
@@ -167,7 +169,25 @@ h1 {
   overflow-y: auto;
 }
 
-.admin input {
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#closeAdmin {
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.admin input,
+.admin textarea {
   width: 100%;
   margin-bottom: 14px;
   padding: 14px;
@@ -175,6 +195,12 @@ h1 {
   border-radius: 14px;
   background: #17212b;
   color: white;
+  font-size: 16px;
+}
+
+.admin textarea {
+  min-height: 140px;
+  resize: vertical;
 }
 
 #savePost {
