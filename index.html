@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
 
   <meta charset="UTF-8" />
@@ -61,7 +62,9 @@
 
       <div class="viewer-info">
 
-        <h2 id="viewerTitle"></h2>
+        <div id="viewerDate"></div>
+
+        <div id="viewerDescription"></div>
 
         <a
           id="viewerPost"
@@ -78,12 +81,15 @@
 
   <div id="adminPanel" class="admin hidden">
 
-    <h2>Добавить пост</h2>
+    <div class="admin-header">
 
-    <input
-      id="adminTitle"
-      placeholder="Название"
-    />
+      <h2>Добавить пост</h2>
+
+      <button id="closeAdmin">
+        ✕
+      </button>
+
+    </div>
 
     <input
       id="adminImage"
@@ -91,9 +97,19 @@
     />
 
     <input
+      id="adminDate"
+      placeholder="28.05.2026"
+    />
+
+    <input
       id="adminTags"
       placeholder="суп, чай, лапша"
     />
+
+    <textarea
+      id="adminDescription"
+      placeholder="Описание..."
+    ></textarea>
 
     <input
       id="adminPost"
@@ -112,4 +128,5 @@
   ></script>
 
 </body>
+
 </html>
