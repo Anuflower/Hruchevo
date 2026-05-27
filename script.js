@@ -22,11 +22,13 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-const tg = window.Telegram.WebApp;
+const tg = window.Telegram?.WebApp;
 
-tg.expand();
+if (tg) {
+  tg.expand();
+}
 
-const user = tg.initDataUnsafe.user;
+const user = tg?.initDataUnsafe?.user;
 
 const userId = user?.id;
 
@@ -67,25 +69,33 @@ loadPosts();
 
 async function loadPosts() {
 
-  const q = query(
-    collection(db, "posts")
-  );
+  try {
 
-  const snapshot = await getDocs(q);
+    const q = query(
+      collection(db, "posts")
+    );
 
-  allPosts = [];
+    const snapshot = await getDocs(q);
 
-  snapshot.forEach(doc => {
+    allPosts = [];
 
-    allPosts.push(doc.data());
+    snapshot.forEach(doc => {
 
-  });
+      allPosts.push(doc.data());
 
-  allPosts.reverse();
+    });
 
-  renderFilters(allPosts);
+    allPosts.reverse();
 
-  showPosts(allPosts);
+    renderFilters(allPosts);
+
+    showPosts(allPosts);
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
 }
 
 function renderFilters(posts) {
@@ -94,7 +104,7 @@ function renderFilters(posts) {
 
   const tags = [
     ...new Set(
-      posts.flatMap(post => post.tags)
+      posts.flatMap(post => post.tags || [])
     )
   ];
 
@@ -119,7 +129,7 @@ function renderFilters(posts) {
     btn.onclick = () => {
 
       const filtered = allPosts.filter(post =>
-        post.tags.includes(tag)
+        post.tags?.includes(tag)
       );
 
       showPosts(filtered);
@@ -157,14 +167,14 @@ function openViewer(post) {
 
   viewer.classList.remove("hidden");
 
-  viewerImage.src = post.image;
+  viewerImage.src = post.image || "";
 
   viewerDate.innerText = post.date || "";
 
   viewerDescription.innerText =
     post.description || "";
 
-  viewerPost.href = post.post;
+  viewerPost.href = post.post || "#";
 }
 
 closeViewer.onclick = () => {
@@ -180,7 +190,8 @@ search.addEventListener("input", e => {
   const filtered = allPosts.filter(post => {
 
     return (
-      post.tags.join(" ")
+      (post.tags || [])
+      .join(" ")
       .toLowerCase()
       .includes(value)
     );
@@ -238,12 +249,20 @@ savePost.onclick = async () => {
     author: userId
   };
 
-  await addDoc(
-    collection(db, "posts"),
-    newPost
-  );
+  try {
 
-  adminPanel.classList.add("hidden");
+    await addDoc(
+      collection(db, "posts"),
+      newPost
+    );
 
-  loadPosts();
+    adminPanel.classList.add("hidden");
+
+    loadPosts();
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
 };
