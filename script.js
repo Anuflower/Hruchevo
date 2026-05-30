@@ -33,7 +33,7 @@ const user = tg?.initDataUnsafe?.user;
 const userId = user?.id;
 
 const ADMINS = [
-  ВСТАВЬ_СВОЙ_ID
+  940931806
 ];
 
 const isAdmin = ADMINS.includes(userId);
