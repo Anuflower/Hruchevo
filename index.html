@@ -61,17 +61,37 @@
           Открыть пост
         </a>
 
+        <div
+          id="adminActions"
+          class="hidden"
+        >
+
+          <button id="editPost">
+            Редактировать
+          </button>
+
+          <button id="deletePost">
+            Удалить
+          </button>
+
+        </div>
+
       </div>
 
     </div>
 
   </div>
 
-  <div id="adminPanel" class="admin hidden">
+  <div
+    id="adminPanel"
+    class="admin hidden"
+  >
 
     <div class="admin-header">
 
-      <h2>Добавить пост</h2>
+      <h2 id="adminTitle">
+        Добавить пост
+      </h2>
 
       <button id="closeAdmin">
         ✕
@@ -81,22 +101,22 @@
 
     <input
       id="adminImage"
-      placeholder="images/photo.jpg"
+      placeholder="https://i.ibb.co/..."
     />
 
     <input
       id="adminDate"
-      placeholder="28.05.2026"
+      placeholder="31.05.2026"
     />
 
     <input
       id="adminTags"
-      placeholder="суп, чай, лапша"
+      placeholder="суп, мясо, чай"
     />
 
     <textarea
       id="adminDescription"
-      placeholder="Описание..."
+      placeholder="Описание блюда..."
     ></textarea>
 
     <input
@@ -106,6 +126,10 @@
 
     <button id="savePost">
       Сохранить
+    </button>
+
+    <button id="cancelEdit">
+      Отмена
     </button>
 
   </div>
