@@ -20,6 +20,7 @@ body {
 h1 {
   margin: 0;
   font-size: 30px;
+  font-weight: 700;
 }
 
 #adminToggle {
@@ -30,6 +31,7 @@ h1 {
   height: 42px;
   border-radius: 14px;
   font-size: 24px;
+  cursor: pointer;
 }
 
 #filters {
@@ -40,6 +42,10 @@ h1 {
   padding-bottom: 5px;
 }
 
+#filters::-webkit-scrollbar {
+  display: none;
+}
+
 .filter-btn {
   border: none;
   background: #17212b;
@@ -47,6 +53,7 @@ h1 {
   padding: 10px 14px;
   border-radius: 14px;
   white-space: nowrap;
+  cursor: pointer;
   transition: 0.2s;
 }
 
@@ -67,7 +74,8 @@ h1 {
   background: #17212b;
   border-radius: 22px;
   overflow: hidden;
-  transition: 0.2s;
+  transition: transform 0.15s;
+  cursor: pointer;
 }
 
 .card:active {
@@ -76,7 +84,7 @@ h1 {
 
 .card img {
   width: 100%;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
 }
@@ -90,7 +98,7 @@ h1 {
 .viewer-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.92);
+  background: rgba(0, 0, 0, 0.92);
 }
 
 .viewer-content {
@@ -112,13 +120,14 @@ h1 {
   top: 20px;
   right: 20px;
   border: none;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.15);
   color: white;
   width: 42px;
   height: 42px;
   border-radius: 50%;
   font-size: 18px;
-  z-index: 5;
+  cursor: pointer;
+  z-index: 1001;
 }
 
 .viewer-info {
@@ -147,16 +156,39 @@ h1 {
 #viewerDescription {
   line-height: 1.6;
   white-space: pre-wrap;
+  margin-bottom: 20px;
 }
 
-.viewer-info a {
+#viewerPost {
   display: inline-block;
-  margin-top: 24px;
   background: #2aabee;
   color: white;
   text-decoration: none;
   padding: 12px 18px;
   border-radius: 16px;
+}
+
+#adminActions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+#editPost,
+#deletePost {
+  border: none;
+  padding: 12px 16px;
+  border-radius: 14px;
+  color: white;
+  cursor: pointer;
+}
+
+#editPost {
+  background: #2aabee;
+}
+
+#deletePost {
+  background: #d9534f;
 }
 
 .hidden {
@@ -179,14 +211,19 @@ h1 {
   margin-bottom: 20px;
 }
 
+.admin-header h2 {
+  margin: 0;
+}
+
 #closeAdmin {
   border: none;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.15);
   color: white;
   width: 42px;
   height: 42px;
   border-radius: 50%;
   font-size: 18px;
+  cursor: pointer;
 }
 
 .admin input,
@@ -214,4 +251,17 @@ h1 {
   background: #2aabee;
   color: white;
   font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+#cancelEdit {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 16px;
+  background: #17212b;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
 }
