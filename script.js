@@ -83,7 +83,10 @@ async function loadPosts() {
 
     snapshot.forEach(doc => {
 
-      allPosts.push(doc.data());
+      allPosts.push({
+        id: doc.id,
+        ...doc.data()
+      });
 
     });
 
