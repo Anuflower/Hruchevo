@@ -33,18 +33,18 @@ const user = tg?.initDataUnsafe?.user;
 const userId = user?.id;
 
 const ADMINS = [
-  940931806
+  ВСТАВЬ_СВОЙ_ID
 ];
 
 const isAdmin = ADMINS.includes(userId);
 
 const gallery = document.getElementById("gallery");
 const filters = document.getElementById("filters");
-const search = document.getElementById("search");
 
 const viewer = document.getElementById("viewer");
 const viewerImage = document.getElementById("viewerImage");
 const viewerDate = document.getElementById("viewerDate");
+const viewerTags = document.getElementById("viewerTags");
 const viewerDescription = document.getElementById("viewerDescription");
 const viewerPost = document.getElementById("viewerPost");
 
@@ -64,6 +64,8 @@ if (!isAdmin) {
 }
 
 let allPosts = [];
+
+let activeTags = [];
 
 loadPosts();
 
@@ -87,7 +89,7 @@ async function loadPosts() {
 
     allPosts.reverse();
 
-    renderFilters(allPosts);
+    renderFilters();
 
     showPosts(allPosts);
 
@@ -98,45 +100,69 @@ async function loadPosts() {
   }
 }
 
-function renderFilters(posts) {
+function renderFilters() {
 
   filters.innerHTML = "";
 
   const tags = [
     ...new Set(
-      posts.flatMap(post => post.tags || [])
+      allPosts.flatMap(post => post.tags || [])
     )
   ];
-
-  const allBtn = document.createElement("button");
-
-  allBtn.innerText = "Все";
-
-  allBtn.onclick = () => {
-
-    showPosts(allPosts);
-
-  };
-
-  filters.appendChild(allBtn);
 
   tags.forEach(tag => {
 
     const btn = document.createElement("button");
 
+    btn.className = "filter-btn";
+
     btn.innerText = "#" + tag;
+
+    if (activeTags.includes(tag)) {
+      btn.classList.add("active");
+    }
 
     btn.onclick = () => {
 
-      const filtered = allPosts.filter(post =>
-        post.tags?.includes(tag)
-      );
+      if (activeTags.includes(tag)) {
 
-      showPosts(filtered);
+        activeTags = activeTags.filter(
+          t => t !== tag
+        );
+
+      } else {
+
+        activeTags.push(tag);
+
+      }
+
+      renderFilters();
+
+      filterPosts();
     };
 
     filters.appendChild(btn);
   });
+}
+
+function filterPosts() {
+
+  if (activeTags.length === 0) {
+
+    showPosts(allPosts);
+
+    return;
+  }
+
+  const filtered = allPosts.filter(post => {
+
+    return activeTags.every(tag =>
+      post.tags?.includes(tag)
+    );
+
+  });
+
+  showPosts(filtered);
 }
 
 function showPosts(posts) {
@@ -175,6 +201,20 @@ function openViewer(post) {
     post.description || "";
 
   viewerPost.href = post.post || "#";
+
+  viewerTags.innerHTML = "";
+
+  (post.tags || []).forEach(tag => {
+
+    const tagEl = document.createElement("div");
+
+    tagEl.className = "viewer-tag";
+
+    tagEl.innerText = "#" + tag;
+
+    viewerTags.appendChild(tagEl);
+
+  });
 }
 
 closeViewer.onclick = () => {
@@ -182,24 +222,6 @@ closeViewer.onclick = () => {
   viewer.classList.add("hidden");
 
 };
-
-search.addEventListener("input", e => {
-
-  const value = e.target.value.toLowerCase();
-
-  const filtered = allPosts.filter(post => {
-
-    return (
-      (post.tags || [])
-      .join(" ")
-      .toLowerCase()
-      .includes(value)
-    );
-
-  });
-
-  showPosts(filtered);
-});
 
 adminToggle.onclick = () => {
 
