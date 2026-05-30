@@ -5,7 +5,10 @@ import {
   collection,
   addDoc,
   getDocs,
-  query
+  query,
+  updateDoc,
+  deleteDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
